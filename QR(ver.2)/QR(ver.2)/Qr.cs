@@ -5,6 +5,8 @@ using System.Windows.Media.Imaging;
 using ZXing;
 using ZXing.QrCode;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using Size = System.Drawing.Size;
 
 namespace QR_ver._2_
 {
@@ -35,14 +37,45 @@ namespace QR_ver._2_
         }
         public ImageSource createQR(string TeXt, Image overlay)
         {
+            System.Drawing.Image i = resizeImage(overlay, new Size(100, 100));
             Bitmap result = new Bitmap(qr.Write(TeXt));
             bmp = result;
-            int deltaHeigth = height - overlay.Height;
-            int deltaWidth = width - overlay.Width;
+            int deltaHeigth = height - i.Height;
+            int deltaWidth = width - i.Width;
             Graphics g = Graphics.FromImage(bmp);//
-            g.DrawImage(overlay, new System.Drawing.Point(deltaWidth / 2, deltaHeigth / 2));
+            g.DrawImage(i, new System.Drawing.Point(deltaWidth / 2, deltaHeigth / 2));
             BitmapSource b = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(result.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
             return b;
+        }
+
+        private static System.Drawing.Image resizeImage(System.Drawing.Image imgToResize, Size size)
+        {
+            //Get the image current width  
+            int sourceWidth = imgToResize.Width;
+            //Get the image current height  
+            int sourceHeight = imgToResize.Height;
+            float nPercent = 0;
+            float nPercentW = 0;
+            float nPercentH = 0;
+            //Calulate  width with new desired size  
+            nPercentW = ((float)size.Width / (float)sourceWidth);
+            //Calculate height with new desired size  
+            nPercentH = ((float)size.Height / (float)sourceHeight);
+            if (nPercentH < nPercentW)
+                nPercent = nPercentH;
+            else
+                nPercent = nPercentW;
+            //New Width  
+            int destWidth = (int)(sourceWidth * nPercent);
+            //New Height  
+            int destHeight = (int)(sourceHeight * nPercent);
+            Bitmap b = new Bitmap(destWidth, destHeight);
+            Graphics g = Graphics.FromImage((System.Drawing.Image)b);
+            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            // Draw image with new width and height  
+            g.DrawImage(imgToResize, 0, 0, destWidth, destHeight);
+            g.Dispose();
+            return (System.Drawing.Image)b;
         }
 
     }
