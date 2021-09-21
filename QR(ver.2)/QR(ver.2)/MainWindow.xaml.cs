@@ -38,30 +38,7 @@ namespace QR_ver._2_
             if (result == true)
             {
                 string filename = dlg.FileName;
-                string format = dlg.Filter;
-                switch (format)
-                {
-                    case "png":
-                        {
-                            bmp1.Save(filename, System.Drawing.Imaging.ImageFormat.Png);
-                            break;
-                        }
-                    case "jpeg":
-                        {
-                            bmp1.Save(filename, System.Drawing.Imaging.ImageFormat.Jpeg);
-                            break;
-                        }
-                    case "gif":
-                        {
-                            bmp1.Save(filename, System.Drawing.Imaging.ImageFormat.Gif);
-                            break;
-                        }
-                    case "bmp":
-                        {
-                            bmp1.Save(filename, System.Drawing.Imaging.ImageFormat.Bmp);
-                            break;
-                        }
-                }
+                bmp1.Save(filename, System.Drawing.Imaging.ImageFormat.Jpeg);
             }
         }
         public System.Drawing.Image openfile() //открыть файл
