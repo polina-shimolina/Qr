@@ -7,6 +7,8 @@ using ZXing.QrCode;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using Size = System.Drawing.Size;
+using ZXing.Rendering;
+using ZXing.QrCode.Internal;
 
 namespace QR_ver._2_
 {
@@ -30,10 +32,54 @@ namespace QR_ver._2_
         //методы
         public ImageSource createQR(string TeXt)
         {
-            Bitmap result = new Bitmap(qr.Write(TeXt));
-            bmp = result;
-            BitmapSource b = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(result.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+            Bitmap result = null;
+            BitmapSource b = null;
+            try
+            {
+                result = new Bitmap(qr.Write(TeXt)); 
+                bmp = result;
+                b = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(result.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions()); 
+            }
+            catch
+            {
+                MessageBox.Show("Enter text", "Error!");
+            }
+            finally
+            {
+                
+            }
             return b;
+        }
+
+
+        public Bitmap createQR(int width, int height, string text)
+        {
+
+            var bw = new ZXing.BarcodeWriter();
+
+            var encOptions = new ZXing.Common.EncodingOptions
+            {
+                Width = width,
+                Height = height,
+                Margin = 0,
+                PureBarcode = false
+            };
+
+            encOptions.Hints.Add(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+
+            bw.Renderer = new BitmapRenderer();
+            bw.Options = encOptions;
+            bw.Format = ZXing.BarcodeFormat.QR_CODE;
+            Bitmap bm = bw.Write(text);
+            Bitmap overlay = new Bitmap(imagePath);
+
+            int deltaHeigth = bm.Height - overlay.Height;
+            int deltaWidth = bm.Width - overlay.Width;
+
+            Graphics g = Graphics.FromImage(bm);
+            g.DrawImage(overlay, new System.Drawing.Point(deltaWidth / 2, deltaHeigth / 2));
+
+            return bm;
         }
         public ImageSource createQR(string TeXt, Image overlay)
         {

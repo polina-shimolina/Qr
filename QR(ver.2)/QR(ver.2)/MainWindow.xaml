@@ -5,13 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:QR_ver._2_"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" MinWidth="600" MinHeight="450">
     <Grid>
-        <Image x:Name="image" HorizontalAlignment="Left" Height="321" Margin="53,40,0,0" VerticalAlignment="Top" Width="321"/>
-        <Button x:Name="openButton" Content="Open" HorizontalAlignment="Left" Margin="420,40,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="-1.725,0.242" Click="openButton_Click"/>
-        <Button x:Name="createButton" Content="Create" HorizontalAlignment="Left" Margin="420,106,0,0" VerticalAlignment="Top" Width="75" Click="createButton_Click"/>
-        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="566,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="saveButton" Content="Save" HorizontalAlignment="Left" Margin="420,174,0,0" VerticalAlignment="Top" Width="75" Click="saveButton_Click"/>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="36"/>
+            <ColumnDefinition Width="162*"/>
+            <ColumnDefinition Width="217*"/>
+        </Grid.ColumnDefinitions>
+        <Image x:Name="image" HorizontalAlignment="Left" Height="321" Margin="0,32,0,0" VerticalAlignment="Top" Width="321" Grid.Column="2"/>
+        <Button x:Name="openButton" Content="Open" HorizontalAlignment="Left" Margin="0,159,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="-1.725,0.242" Click="openButton_Click" Grid.Column="1" Height="19"/>
+        <Button x:Name="createButton" Content="Create" HorizontalAlignment="Left" Margin="0,242,0,0" VerticalAlignment="Top" Width="75" Click="createButton_Click" Grid.Column="1" Height="19"/>
+        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="0,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Column="1" TextChanged="textBox_TextChanged"/>
+        <Button x:Name="saveButton" Content="Save" HorizontalAlignment="Left" Margin="0,319,0,0" Width="75" Click="saveButton_Click" Grid.Column="1" Height="19" VerticalAlignment="Top"/>
+        <Label Content="generate QR" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="77"/>
+        <Label Content="1. insert your url or text" HorizontalAlignment="Left" Margin="0,49,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="133"/>
+        <Label Content="2. add the image" HorizontalAlignment="Left" Margin="0,128,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="99"/>
+        <Label Content="3. press the button to create qr" HorizontalAlignment="Left" Margin="0,211,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="174"/>
+        <Label Content="4. save qr" HorizontalAlignment="Left" Margin="0,288,0,0" Grid.Column="1" Width="61" Height="26" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

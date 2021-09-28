@@ -81,5 +81,10 @@ namespace QR_ver._2_
             }
             
         }
+
+        private void textBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
     }
 }
