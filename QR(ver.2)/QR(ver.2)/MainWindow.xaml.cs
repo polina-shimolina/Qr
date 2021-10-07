@@ -31,28 +31,35 @@ namespace QR_ver._2_
 
         public void SaveQR(System.Drawing.Image bmp1)  //сохранить qr
         {
-            SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-            dlg.FileName = "QR";
-            dlg.Filter = "PNG|*.png|JPEG|*.jpeg|GIF|*.gif|BMP|*.bmp";                                                    
-            Nullable<bool> result = dlg.ShowDialog();
+            SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
+            dialog.FileName = "QR";
+            dialog.Filter = "PNG|*.png|JPEG|*.jpeg|GIF|*.gif|BMP|*.bmp";                                                    
+            Nullable<bool> result = dialog.ShowDialog();
             if (result == true)
             {
-                string filename = dlg.FileName;
+                string filename = dialog.FileName;
                 bmp1.Save(filename, System.Drawing.Imaging.ImageFormat.Jpeg);
             }
         }
         public System.Drawing.Image openfile() //открыть файл
         {
-            OpenFileDialog ofd = new OpenFileDialog();
+            OpenFileDialog openFileDialog = new OpenFileDialog();
 
-            ofd.InitialDirectory = "c:\\";
-            ofd.Filter = "PNG|*.png|JPEG|*.jpg|GIF|*.gif|BMP|*.bmp";
-            ofd.FilterIndex = 2;
-            ofd.RestoreDirectory = true;
-            ofd.ShowDialog();
-            string filename = ofd.FileName; //////////
-            System.Drawing.Image newImage = System.Drawing.Image.FromFile(filename);
-
+            openFileDialog.InitialDirectory = "c:\\";
+            openFileDialog.Filter = "PNG|*.png|JPEG|*.jpg|GIF|*.gif|BMP|*.bmp";
+            openFileDialog.FilterIndex = 2;
+            openFileDialog.RestoreDirectory = true;
+            openFileDialog.ShowDialog();
+            string filename = openFileDialog.FileName; //////////
+            System.Drawing.Image newImage = null;
+            try
+            {
+                newImage = System.Drawing.Image.FromFile(filename);
+            }
+            catch
+            {
+          
+            }
             return newImage;
         }
 

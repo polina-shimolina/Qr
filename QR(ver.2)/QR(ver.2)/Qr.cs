@@ -44,54 +44,59 @@ namespace QR_ver._2_
             {
                 MessageBox.Show("Enter text", "Error!");
             }
-            finally
-            {
-                
-            }
             return b;
         }
 
 
-        public Bitmap createQR(int width, int height, string text)
-        {
+        //public Bitmap createQR(int width, int height, string text)
+        //{
 
-            var bw = new ZXing.BarcodeWriter();
+        //    var bw = new ZXing.BarcodeWriter();
 
-            var encOptions = new ZXing.Common.EncodingOptions
-            {
-                Width = width,
-                Height = height,
-                Margin = 0,
-                PureBarcode = false
-            };
+        //    var encOptions = new ZXing.Common.EncodingOptions
+        //    {
+        //        Width = width,
+        //        Height = height,
+        //        Margin = 0,
+        //        PureBarcode = false
+        //    };
 
-            encOptions.Hints.Add(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+        //    encOptions.Hints.Add(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
 
-            bw.Renderer = new BitmapRenderer();
-            bw.Options = encOptions;
-            bw.Format = ZXing.BarcodeFormat.QR_CODE;
-            Bitmap bm = bw.Write(text);
-            Bitmap overlay = new Bitmap(imagePath);
+        //    bw.Renderer = new BitmapRenderer();
+        //    bw.Options = encOptions;
+        //    bw.Format = ZXing.BarcodeFormat.QR_CODE;
+        //    Bitmap bm = bw.Write(text);
+        //    Bitmap overlay = new Bitmap(imagePath);
 
-            int deltaHeigth = bm.Height - overlay.Height;
-            int deltaWidth = bm.Width - overlay.Width;
+        //    int deltaHeigth = bm.Height - overlay.Height;
+        //    int deltaWidth = bm.Width - overlay.Width;
 
-            Graphics g = Graphics.FromImage(bm);
-            g.DrawImage(overlay, new System.Drawing.Point(deltaWidth / 2, deltaHeigth / 2));
+        //    Graphics g = Graphics.FromImage(bm);
+        //    g.DrawImage(overlay, new System.Drawing.Point(deltaWidth / 2, deltaHeigth / 2));
 
-            return bm;
-        }
+        //    return bm;
+        //}
         public ImageSource createQR(string TeXt, Image overlay)
         {
-            System.Drawing.Image i = resizeImage(overlay, new Size(100, 100));
-            Bitmap result = new Bitmap(qr.Write(TeXt));
+            System.Drawing.Image image = resizeImage(overlay, new Size(100, 100));
+            Bitmap result = null;
+            try
+            {
+                result = new Bitmap(qr.Write(TeXt));
+            }
+            catch
+            {
+                MessageBox.Show("Error", "Error!");
+            }
+          
             bmp = result;
-            int deltaHeigth = height - i.Height;
-            int deltaWidth = width - i.Width;
-            Graphics g = Graphics.FromImage(bmp);//
-            g.DrawImage(i, new System.Drawing.Point(deltaWidth / 2, deltaHeigth / 2));
-            BitmapSource b = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(result.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-            return b;
+            int deltaHeigth = height - image.Height;
+            int deltaWidth = width - image.Width;
+            Graphics graphics = Graphics.FromImage(bmp);//
+            graphics.DrawImage(image, new System.Drawing.Point(deltaWidth / 2, deltaHeigth / 2));
+            BitmapSource bitmap = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(result.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+            return bitmap;
         }
 
         private static System.Drawing.Image resizeImage(System.Drawing.Image imgToResize, Size size)
