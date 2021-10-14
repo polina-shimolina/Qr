@@ -16,35 +16,35 @@ namespace QR_ver._2_
     {
         //поля
         private int width, height;
-        BarcodeWriter qr;
+        BarcodeWriter qrWriter;
         public Bitmap bmp;
 
         //конструктор
-        public Qr(int w = 300, int h = 300)
+        public Qr(int _width = 300, int _height = 300)
         {
-            width = w;
-            height = h;
+            width = _width;
+            height = _height;
             QrCodeEncodingOptions options = new QrCodeEncodingOptions { DisableECI = true, CharacterSet = "UTF-8", Width = width, Height = height };
-            qr = new BarcodeWriter();
-            qr.Options = options;
-            qr.Format = ZXing.BarcodeFormat.QR_CODE;
+            qrWriter = new BarcodeWriter();
+            qrWriter.Options = options;
+            qrWriter.Format = BarcodeFormat.QR_CODE;
         }
         //методы
-        public ImageSource createQR(string TeXt)
+        public ImageSource createQR(string text)
         {
-            Bitmap result = null;
-            BitmapSource b = null;
+            Bitmap baseQR = null;
+            BitmapSource result = null;
             try
             {
-                result = new Bitmap(qr.Write(TeXt)); 
-                bmp = result;
-                b = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(result.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions()); 
+                baseQR = new Bitmap(qrWriter.Write(text)); 
+                bmp = baseQR;
+                result = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(baseQR.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
             }
             catch
             {
                 MessageBox.Show("Enter text", "Error!");
             }
-            return b;
+            return result;
         }
 
 
@@ -77,29 +77,30 @@ namespace QR_ver._2_
 
         //    return bm;
         //}
-        public ImageSource createQR(string TeXt, Image overlay)
+
+        public ImageSource createQR(string text, Image overlay)
         {
-            System.Drawing.Image image = resizeImage(overlay, new Size(100, 100));
-            Bitmap result = null;
+            Image imageOverlay = resizeImage(overlay, new Size(100, 100));
+            Bitmap newBitmap = null;
             try
             {
-                result = new Bitmap(qr.Write(TeXt));
+                newBitmap = new Bitmap(qrWriter.Write(text));
             }
             catch
             {
-                MessageBox.Show("Error", "Error!");
+                MessageBox.Show("Enter text", "Error!");
             }
           
-            bmp = result;
-            int deltaHeigth = height - image.Height;
-            int deltaWidth = width - image.Width;
+            bmp = newBitmap;
+            int deltaHeigth = height - imageOverlay.Height;
+            int deltaWidth = width - imageOverlay.Width;
             Graphics graphics = Graphics.FromImage(bmp);//
-            graphics.DrawImage(image, new System.Drawing.Point(deltaWidth / 2, deltaHeigth / 2));
-            BitmapSource bitmap = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(result.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-            return bitmap;
+            graphics.DrawImage(imageOverlay, new System.Drawing.Point(deltaWidth / 2, deltaHeigth / 2));
+            BitmapSource result = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(newBitmap.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+            return result;
         }
 
-        private static System.Drawing.Image resizeImage(System.Drawing.Image imgToResize, Size size)
+        private static Image resizeImage(Image imgToResize, Size size)
         {
             //Get the image current width  
             int sourceWidth = imgToResize.Width;
@@ -120,14 +121,13 @@ namespace QR_ver._2_
             int destWidth = (int)(sourceWidth * nPercent);
             //New Height  
             int destHeight = (int)(sourceHeight * nPercent);
-            Bitmap b = new Bitmap(destWidth, destHeight);
-            Graphics g = Graphics.FromImage((System.Drawing.Image)b);
-            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            Bitmap result = new Bitmap(destWidth, destHeight);
+            Graphics graphics = Graphics.FromImage((Image)result);
+            graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
             // Draw image with new width and height  
-            g.DrawImage(imgToResize, 0, 0, destWidth, destHeight);
-            g.Dispose();
-            return (System.Drawing.Image)b;
+            graphics.DrawImage(imgToResize, 0, 0, destWidth, destHeight);
+            graphics.Dispose();
+            return (Image)result;
         }
-
     }
 }

@@ -23,22 +23,22 @@ namespace QR_ver._2_
     {
         Qr qr = new Qr();
         ImageSource qrimage;
-        System.Drawing.Image file;
+        System.Drawing.Image overlay;
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        public void SaveQR(System.Drawing.Image bmp1)  //сохранить qr
+        public void SaveQR(System.Drawing.Image newBitmap)  //сохранить qr
         {
-            SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
-            dialog.FileName = "QR";
-            dialog.Filter = "PNG|*.png|JPEG|*.jpeg|GIF|*.gif|BMP|*.bmp";                                                    
-            Nullable<bool> result = dialog.ShowDialog();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.FileName = "QR";
+            saveFileDialog.Filter = "PNG|*.png|JPEG|*.jpeg|GIF|*.gif|BMP|*.bmp";                                                    
+            Nullable<bool> result = saveFileDialog.ShowDialog();
             if (result == true)
             {
-                string filename = dialog.FileName;
-                bmp1.Save(filename, System.Drawing.Imaging.ImageFormat.Jpeg);
+                string filename = saveFileDialog.FileName;
+                newBitmap.Save(filename, System.Drawing.Imaging.ImageFormat.Jpeg);
             }
         }
         public System.Drawing.Image openfile() //открыть файл
@@ -50,7 +50,7 @@ namespace QR_ver._2_
             openFileDialog.FilterIndex = 2;
             openFileDialog.RestoreDirectory = true;
             openFileDialog.ShowDialog();
-            string filename = openFileDialog.FileName; //////////
+            string filename = openFileDialog.FileName; 
             System.Drawing.Image newImage = null;
             try
             {
@@ -65,7 +65,7 @@ namespace QR_ver._2_
 
         private void openButton_Click(object sender, RoutedEventArgs e)
         {
-            file = openfile();
+            overlay = openfile();
         }
 
         private void saveButton_Click(object sender, RoutedEventArgs e)
@@ -75,14 +75,14 @@ namespace QR_ver._2_
 
         private void createButton_Click(object sender, RoutedEventArgs e)
         {
-            if (file == null)
+            if (overlay == null)
             {
                 qrimage = qr.createQR(textBox.Text.Trim());
                 image.Source = qrimage;
                 textBox.Clear();
             } else
             {
-                qrimage = qr.createQR(textBox.Text.Trim(), file);
+                qrimage = qr.createQR(textBox.Text.Trim(), overlay);
                 image.Source = qrimage;
                 textBox.Clear();
             }
